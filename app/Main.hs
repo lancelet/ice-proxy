@@ -2,7 +2,7 @@
 
 module Main where
 
-import Ice (proxyApp)
+import Ice (proxyApp, testLogger)
 
 import qualified Network.HTTP.Client.Conduit as HConduit
 import qualified Network.HTTP.Proxy as Proxy
@@ -10,11 +10,12 @@ import qualified Network.Wai.Handler.Warp as Warp
 
 main :: IO ()
 main = do
-    --Proxy.runProxy 2319
     manager <- HConduit.newManager
     let
         port = 2319
-        app = proxyApp Nothing port manager
+        plainApp = proxyApp Nothing port manager
+        middleLog = testLogger
+        app = testLogger plainApp
     Warp.runSettings (warpSettings port) app
     
 warpSettings :: Int -> Warp.Settings
